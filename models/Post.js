@@ -1,3 +1,5 @@
+const postsCollection = require('../db').db().collection('posts');
+
 let Post = function (data) {
 	this.data = data;
 	this.errors = [];
@@ -32,6 +34,15 @@ Post.prototype.create = function () {
 		this.validate();
 		if (!this.errors.length) {
 			// Save post in database
+			postsCollection
+				.insertOne(this.data)
+				.then(() => {
+					resolve();
+				})
+				.catch(() => {
+					this.errors.push('Please try again later');
+					reject(this.errors);
+				});
 		} else {
 			reject(this.errors);
 		}
