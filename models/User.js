@@ -63,7 +63,7 @@ User.prototype.validate = function () {
 			this.errors.push('Username cannot exceed 30 characters.');
 		}
 
-		// Only if username is valid then check to see if it is already taken
+		// Only if username is valid then check to see if it's already taken
 		if (
 			this.data.username.length > 2 &&
 			this.data.username.length < 31 &&
@@ -73,22 +73,23 @@ User.prototype.validate = function () {
 				username: this.data.username,
 			});
 			if (usernameExists) {
-				this.errors.push('Username already exist');
+				this.errors.push('That username is already taken.');
 			}
 		}
 
-		// Only if email is valid then check to see if it is already taken
+		// Only if email is valid then check to see if it's already taken
 		if (validator.isEmail(this.data.email)) {
 			let emailExists = await usersCollection.findOne({
 				email: this.data.email,
 			});
 			if (emailExists) {
-				this.errors.push('Email already exist');
+				this.errors.push('That email is already being used.');
 			}
 		}
 		resolve();
 	});
 };
+
 User.prototype.login = function () {
 	return new Promise((resolve, reject) => {
 		this.cleanUp();
@@ -123,10 +124,10 @@ User.prototype.register = function () {
 
 		// Step #2: Only if there are no validation errors
 		// then save the user data into a database
-		// hash user password
-		let salt = bcrypt.genSaltSync(10);
-		this.data.password = bcrypt.hashSync(this.data.password, salt);
 		if (!this.errors.length) {
+			// hash user password
+			let salt = bcrypt.genSaltSync(10);
+			this.data.password = bcrypt.hashSync(this.data.password, salt);
 			await usersCollection.insertOne(this.data);
 			this.getAvatar();
 			resolve();

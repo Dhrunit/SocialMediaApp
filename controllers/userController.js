@@ -5,8 +5,8 @@ exports.mustBeLoggedIn = function (req, res, next) {
 	if (req.session.user) {
 		next();
 	} else {
-		req.flash('errors', 'You must be logged in');
-		req.session.save(() => {
+		req.flash('errors', 'You must be logged in to perform that action.');
+		req.session.save(function () {
 			res.redirect('/');
 		});
 	}
@@ -53,7 +53,7 @@ exports.register = function (req, res) {
 			});
 		})
 		.catch((regErrors) => {
-			user.errors.forEach(function (error) {
+			regErrors.forEach(function (error) {
 				req.flash('regErrors', error);
 			});
 			req.session.save(function () {
@@ -66,10 +66,7 @@ exports.home = function (req, res) {
 	if (req.session.user) {
 		res.render('home-dashboard');
 	} else {
-		res.render('home-guest', {
-			errors: req.flash('errors'),
-			regErrors: req.flash('regErrors'),
-		});
+		res.render('home-guest', { regErrors: req.flash('regErrors') });
 	}
 };
 
@@ -84,14 +81,13 @@ exports.ifUserExists = function (req, res, next) {
 		});
 };
 
-exports.profilePostsScreen = function (req, res, next) {
-	// ask our post model for posts by  acertain author id
+exports.profilePostsScreen = function (req, res) {
+	// ask our post model for posts by a certain author id
 	Post.findByAuthorId(req.profileUser._id)
 		.then(function (posts) {
-			console.log(posts[0]);
 			res.render('profile', {
-				posts,
-				profileUserName: req.profileUser.username,
+				posts: posts,
+				profileUsername: req.profileUser.username,
 				profileAvatar: req.profileUser.avatar,
 			});
 		})
