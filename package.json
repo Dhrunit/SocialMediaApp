@@ -4,12 +4,15 @@
 	"description": "",
 	"main": "app.js",
 	"scripts": {
-		"start": "nodemon db.js"
+		"start": "start nodemon db.js --ignore frontend-js --ignore public/  && start webpack --watch"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"@babel/core": "^7.12.10",
+		"@babel/preset-env": "^7.12.11",
+		"babel-loader": "^8.2.2",
 		"bcryptjs": "^2.4.3",
 		"connect-flash": "^0.1.1",
 		"connect-mongo": "^3.2.0",
@@ -22,6 +25,8 @@
 		"mongodb": "^3.5.7",
 		"nodemon": "^2.0.4",
 		"sanitize-html": "^2.2.0",
-		"validator": "^13.0.0"
+		"validator": "^13.0.0",
+		"webpack": "^5.10.3",
+		"webpack-cli": "^4.2.0"
 	}
 }
