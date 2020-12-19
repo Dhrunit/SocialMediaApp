@@ -38,6 +38,7 @@ export default class Search {
 
 	// 3. Methods
 	renderResultsHTML(posts) {
+		console.log('test')
 		if (posts.length) {
 			this.resultsArea.innerHTML = DOMPurify.sanitize(`<div class="list-group shadow-sm">
 			<div class="list-group-item active"><strong>Search Results</strong> (${
